@@ -84,7 +84,9 @@ agent = Agent(
     [
     fetch_url,
     OpenAIWebSearchTool()
-    ], 
+    ],
+    
+    memories=[open(os.path.join(BASE_DIR, "user_profile.md")).read()], 
 )
 
 
