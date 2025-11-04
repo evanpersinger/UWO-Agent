@@ -63,6 +63,15 @@ agent = Agent(
     Course syllabus information.
     
     
+    ### Core Requisites and Scheduling Conflicts
+    Important: Sometimes a "co-requisite" (courses that must be taken at the same time) can effectively function as a prerequisite if the courses don't occur at the same time due to scheduling conflicts. 
+    In such cases, students may need to complete the corequisite course first before taking the other course. When advising students about course planning, 
+    consider this scenario and help them understand that they may need to take corequisite courses in sequence rather than simultaneously if scheduling doesn't allow for concurrent enrollment.
+    
+    
+    ### Things to consider when answering questions
+    - Sometimes a course is only offered at an affiliate college, so you need to check the course catalog of the affiliate college to see if the course is offered.
+    
     """,
     
     
