@@ -5,10 +5,10 @@ from agentic.common import Agent, AgentRunner
 from agentic.models import GPT_4O_MINI
 from agentic.tools import  OpenAIWebSearchTool
 from dotenv import load_dotenv
-from openai import OpenAI
 import os
 from urllib.request import urlopen
 from urllib.error import URLError
+from bs4 import BeautifulSoup
 
 
 load_dotenv()  # This loads variables from .env into os.environ
@@ -28,11 +28,18 @@ COURSE_URLS = [
 
 # fetch content from a URL
 def fetch_url(url: str) -> str:
-    """Fetches and returns the content from a specific URL."""
+    """Fetches and returns the parsed text content from a specific URL."""
     try:
         with urlopen(url) as response:
-            content = response.read().decode('utf-8')
-            return content
+            html_content = response.read().decode('utf-8')
+            # Parse HTML and extract text
+            soup = BeautifulSoup(html_content, 'html.parser')
+            # Remove script and style elements
+            for script in soup(["script", "style"]):
+                script.decompose()
+            # Get text and clean it up
+            text = soup.get_text(separator=' ', strip=True)
+            return text
     except URLError as e:
         return f"Could not fetch {url}: {e}"
     except Exception as e:
@@ -41,6 +48,22 @@ def fetch_url(url: str) -> str:
 
 
 Model=GPT_4O_MINI
+
+
+# Load user profile safely
+def _load_user_profile() -> str:
+    """Loads user profile from file, returns empty string if file doesn't exist or is empty."""
+    profile_path = os.path.join(BASE_DIR, "user_profile.md")
+    if not os.path.exists(profile_path):
+        return "User profile not found. Please fill in user_profile.md for personalized advice."
+    try:
+        with open(profile_path, 'r') as f:
+            content = f.read().strip()
+            if not content or content.startswith("# User's profile"):
+                return "User profile is empty. Please fill in user_profile.md with your campus, program, year, and completed courses for personalized advice."
+            return content
+    except Exception as e:
+        return f"Error loading user profile: {e}"
 
 
 # agent
@@ -86,7 +109,7 @@ agent = Agent(
     OpenAIWebSearchTool()
     ],
     
-    memories=[open(os.path.join(BASE_DIR, "user_profile.md")).read()], 
+    memories=[_load_user_profile()], 
 )
 
 
