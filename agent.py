@@ -1,5 +1,6 @@
 # agent.py
 # This agent helps students research courses at Western University.
+# This agent requires the use of an openai api key in order to function.
 
 from agentic.common import Agent, AgentRunner 
 from agentic.models import GPT_4O_MINI
@@ -31,7 +32,7 @@ COURSE_URLS = [
 # Simple cache for course data
 _course_cache = {}
 
-# fetch content from a URL (with caching)
+# fetch content from a URL
 @lru_cache(maxsize=50)
 def fetch_url(url: str) -> str:
     """Fetches and returns the parsed text content from a specific URL. Results are cached."""
@@ -58,7 +59,7 @@ def check_prerequisites(course_code: str) -> str:
     Returns information about missing prerequisites based on user profile.
     
     Args:
-        course_code: Course code (e.g., "CS1027", "MATH1000")
+        course_code: Course code ("CS1027", "MATH1600")
     """
     user_profile = _load_user_profile()
     if "User profile" in user_profile and "courses:" in user_profile.lower():
@@ -163,8 +164,8 @@ agent = Agent(
     
     You're an expert in course planning and scheduling at Western University.
     You're a helpful assistant that helps students research courses at Western University.
-    You will also help answer any questions students have regarding the courses at Western University.
-    You have access to a lot of information about the courses at Western University.
+    You will also help answer any questions students have regarding courses at Western University.
+    Use the given links to find information about the courses at Western University.
     
     
     ### Student Questions
@@ -174,6 +175,7 @@ agent = Agent(
     Course syllabus information.
     Course recommendations based on their program and completed courses.
     Whether they can take a specific course (prerequisite checking).
+    If you don't understand a student's question, ask them to clarify.
     
     
     ### Core Requisites and Scheduling Conflicts

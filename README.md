@@ -16,11 +16,12 @@ An AI agent that helps students research and plan courses at Western University.
 
 ## Prerequisites
 
-Before installing, make sure you have the following installed on your system:
+Before installing, make sure you have the following:
 
 - **Python 3.x** - Check with: `python --version` or `python3 --version`
 - **pip** - Python package manager (usually comes with Python). Check with: `pip --version` or `pip3 --version`
 - **Git** - For cloning the repository. Check with: `git --version`
+- **OpenAI API Key** - Required for the agent to function. Get one at [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
 
 If any of these are missing, install them before proceeding with the installation.
 
@@ -51,8 +52,10 @@ pip install -r requirements.txt
 
 ## Setup
 
+**Important:** The agent requires an OpenAI API key to function. Without it, the agent will not work.
+
 1. Create a `.env` file in the project root
-2. Add your OpenAI API key:
+2. Add your OpenAI API key (get one at [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)):
 
 ```
 OPENAI_API_KEY=your_api_key_here
