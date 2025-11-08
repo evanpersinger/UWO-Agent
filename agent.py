@@ -9,6 +9,8 @@ import os
 from urllib.request import urlopen
 from urllib.error import URLError
 from bs4 import BeautifulSoup
+import re
+from functools import lru_cache
 
 
 load_dotenv()  # This loads variables from .env into os.environ
@@ -26,9 +28,13 @@ COURSE_URLS = [
 
 
 
-# fetch content from a URL
+# Simple cache for course data
+_course_cache = {}
+
+# fetch content from a URL (with caching)
+@lru_cache(maxsize=50)
 def fetch_url(url: str) -> str:
-    """Fetches and returns the parsed text content from a specific URL."""
+    """Fetches and returns the parsed text content from a specific URL. Results are cached."""
     try:
         with urlopen(url) as response:
             html_content = response.read().decode('utf-8')
@@ -46,13 +52,94 @@ def fetch_url(url: str) -> str:
         return f"Error fetching {url}: {e}"
 
 
+def check_prerequisites(course_code: str) -> str:
+    """
+    Checks if the user has completed prerequisites for a given course.
+    Returns information about missing prerequisites based on user profile.
+    
+    Args:
+        course_code: Course code (e.g., "CS1027", "MATH1000")
+    """
+    user_profile = _load_user_profile()
+    if "User profile" in user_profile and "courses:" in user_profile.lower():
+        # Extract completed courses from profile
+        completed_courses = []
+        for line in user_profile.split('\n'):
+            if re.match(r'^[A-Z]{2,4}\s?\d{4}', line.strip(), re.IGNORECASE):
+                completed_courses.append(line.strip().upper())
+        
+        # Fetch course info to check prerequisites
+        course_url = f"https://westerncalendar.uwo.ca/Courses.cfm?SelectedCalendar=Live&ArchiveID="
+        course_info = fetch_url(course_url)
+        
+        # Look for course in the fetched data
+        course_code_upper = course_code.upper().replace(' ', '')
+        if course_code_upper in course_info:
+            return f"Found course {course_code}. Use fetch_url to get detailed prerequisite information, then compare with user's completed courses: {', '.join(completed_courses) if completed_courses else 'None listed'}."
+        else:
+            return f"Course {course_code} not found in main catalog. It may be at an affiliate college. User's completed courses: {', '.join(completed_courses) if completed_courses else 'None listed'}."
+    else:
+        return "User profile not loaded. Cannot check prerequisites. Please fill in user_profile.md with completed courses."
 
+
+def search_courses(query: str) -> str:
+    """
+    Searches for courses by name or code.
+    
+    Args:
+        query: Search term (course name, code, or keywords)
+    """
+    course_url = COURSE_URLS[0]
+    course_data = fetch_url(course_url)
+    
+    # Simple search in the course data
+    query_lower = query.lower()
+    matches = []
+    lines = course_data.split('\n')
+    
+    for i, line in enumerate(lines):
+        if query_lower in line.lower():
+            # Get context around the match
+            context = ' '.join(lines[max(0, i-1):min(len(lines), i+2)])
+            matches.append(context)
+            if len(matches) >= 10:  # Limit results
+                break
+    
+    if matches:
+        return f"Found {len(matches)} potential matches for '{query}':\n\n" + "\n\n---\n\n".join(matches[:5])
+    else:
+        return f"No courses found matching '{query}'. Try a different search term or check affiliate college catalogs."
+
+
+def get_completed_courses() -> str:
+    """Returns a list of courses the user has completed from their profile."""
+    user_profile = _load_user_profile()
+    if "courses:" in user_profile.lower():
+        courses = []
+        in_courses_section = False
+        for line in user_profile.split('\n'):
+            if 'courses:' in line.lower():
+                in_courses_section = True
+                continue
+            if in_courses_section and line.strip():
+                courses.append(line.strip())
+        
+        if courses:
+            return f"Completed courses: {', '.join(courses)}"
+    
+    return "No completed courses found in user profile. Please add them to user_profile.md"
+
+
+
+
+
+# model used by the agent
 Model=GPT_4O_MINI
 
 
 # Load user profile safely
 def _load_user_profile() -> str:
-    """Loads user profile from file, returns empty string if file doesn't exist or is empty."""
+    """returns empty string if file doesn't exist or is empty."""
     profile_path = os.path.join(BASE_DIR, "user_profile.md")
     if not os.path.exists(profile_path):
         return "User profile not found. Please fill in user_profile.md for personalized advice."
@@ -74,6 +161,7 @@ agent = Agent(
     # how the ai agent functions
     instructions="""
     
+    You're an expert in course planning and scheduling at Western University.
     You're a helpful assistant that helps students research courses at Western University.
     You will also help answer any questions students have regarding the courses at Western University.
     You have access to a lot of information about the courses at Western University.
@@ -84,6 +172,8 @@ agent = Agent(
     Course prerequisites, co-requisites, and antirequisites.
     Course descriptions. 
     Course syllabus information.
+    Course recommendations based on their program and completed courses.
+    Whether they can take a specific course (prerequisite checking).
     
     
     ### Core Requisites and Scheduling Conflicts
@@ -92,8 +182,16 @@ agent = Agent(
     consider this scenario and help them understand that they may need to take corequisite courses in sequence rather than simultaneously if scheduling doesn't allow for concurrent enrollment.
     
     
+    ### Available Tools
+    - Use `search_courses(query)` to find courses by name or code
+    - Use `check_prerequisites(course_code)` to verify if the student has met prerequisites
+    - Use `get_completed_courses()` to see what courses the student has already taken
+    - Use `fetch_url(url)` to get detailed course information from the calendar
+    
     ### Things to consider when answering questions
     - Sometimes a course is only offered at an affiliate college, so you need to check the course catalog of the affiliate college to see if the course is offered.
+    - When recommending courses, consider the student's program, year, and completed courses from their profile.
+    - Always check prerequisites before recommending a course.
     
     """,
     
@@ -106,7 +204,10 @@ agent = Agent(
     tools=
     [
     fetch_url,
-    OpenAIWebSearchTool()
+    OpenAIWebSearchTool(),
+    check_prerequisites,
+    search_courses,
+    get_completed_courses,
     ],
     
     memories=[_load_user_profile()], 

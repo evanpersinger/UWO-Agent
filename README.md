@@ -1,14 +1,18 @@
 # UWO Course Research Agent
 
-An AI agent that helps students research courses at Western University. The agent can answer questions about course prerequisites, descriptions, syllabi, and other course-related information.
+An AI agent that helps students research and plan courses at Western University. The agent is an expert in course planning and scheduling, and can answer questions about course prerequisites, descriptions, syllabi, and provide personalized course recommendations.
 
 ## Features
 
 - Answer questions about Western University courses
 - Access course information from the Western University calendar
-- Search the web for additional course information
+- Search for courses by name or code
+- Check if you've met prerequisites for specific courses
+- Get personalized course recommendations based on your program and completed courses
+- View your completed course history
 - Help with prerequisites, co-requisites, and antirequisites
 - Provide course descriptions and syllabus information
+- Cached course data for faster responses
 
 ## Prerequisites
 
@@ -72,6 +76,14 @@ python agent.py
 
 The agent will start a REPL loop where you can ask questions about Western University courses. Type your questions and the agent will help you find the information you need.
 
+### Example Questions
+
+- "Can I take CS1027?" - Checks if you've met the prerequisites
+- "Search for psychology courses" - Finds courses matching your search
+- "What courses have I completed?" - Shows your course history
+- "Recommend courses for my program" - Gets personalized recommendations
+- "What are the prerequisites for MATH1000?" - Gets prerequisite information
+
 To exit the agent, type `exit` or press `Ctrl+C`.
 
 ## Project Structure
@@ -84,6 +96,9 @@ To exit the agent, type `exit` or press `Ctrl+C`.
 ## Tools
 
 The agent has access to:
-- `fetch_url` - Fetches content from Western University course calendar URLs
+- `fetch_url` - Fetches content from Western University course calendar URLs (with caching for faster responses)
 - `OpenAIWebSearchTool` - Web search capabilities for additional information
+- `check_prerequisites` - Checks if you've completed prerequisites for a course
+- `search_courses` - Searches for courses by name or code
+- `get_completed_courses` - Retrieves your completed courses from your profile
 
