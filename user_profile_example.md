@@ -11,6 +11,7 @@ Campus:
 Specify whether you're in the honours program or not.
 
 Program: 
+Are you in the honours program: 
 
 
 ### What year are you in?
@@ -19,5 +20,7 @@ Year:
 
 
 ### What courses have you completed?
+Specify whether it was a full year or half semester course (0.5, 1.0)
+Specify whether the course is a A, B, or C.
 courses:
 

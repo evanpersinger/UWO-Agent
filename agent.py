@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 COURSE_URLS = [
     "https://westerncalendar.uwo.ca/Courses.cfm",
     "https://westerncalendar.uwo.ca/SessionalDates.cfm?SelectedCalendar=Live&ArchiveID=",
+    "https://www.westerncalendar.uwo.ca/PolicyPages.cfm?Command=showCategory&PolicyCategoryID=4&SelectedCalendar=Live&ArchiveID=#SubHeading_7",
 ]
 
 
@@ -63,6 +64,19 @@ def _load_user_profile() -> str:
             return content
     except Exception as e:
         return f"Error loading user profile: {e}"
+
+
+# Load the breadth (graduation) requirements reference
+def _load_breadth_requirements() -> str:
+    """Returns the breadth requirement subject categories, or a fallback message."""
+    breadth_path = os.path.join(BASE_DIR, "Breadth_requirements.md")
+    if not os.path.exists(breadth_path):
+        return "Breadth requirements file not found."
+    try:
+        with open(breadth_path, 'r') as f:
+            return f.read().strip()
+    except Exception as e:
+        return f"Error loading breadth requirements: {e}"
 
 
 # ---- Tools the agent can call ----
@@ -154,6 +168,12 @@ def get_completed_courses() -> str:
     return "No completed courses found in user profile. Please add them to user_profile.md"
 
 
+@function_tool
+def get_breadth_requirements() -> str:
+    """Returns Western's breadth requirement subject categories (A, B, C) needed for graduation."""
+    return _load_breadth_requirements()
+
+
 # model used by the agent
 MODEL = "gpt-4o-mini"
 
@@ -164,6 +184,7 @@ MODEL = "gpt-4o-mini"
 INSTRUCTIONS = f"""
 
 You're an expert in course planning and scheduling at Western University.
+You're job is to help students figure out their graduation requirements and choose classes.
 You're a helpful assistant that helps students research courses at Western University.
 You will also help answer any questions students have regarding courses at Western University.
 Use the given links to find information about the courses at Western University.
@@ -189,12 +210,19 @@ consider this scenario and help them understand that they may need to take coreq
 - Use `search_courses(query)` to find courses by name or code
 - Use `check_prerequisites(course_code)` to verify if the student has met prerequisites
 - Use `get_completed_courses()` to see what courses the student has already taken
+- Use `get_breadth_requirements()` to see which subject areas fulfill each breadth category (A, B, C)
 - Use `fetch_url(url)` to get detailed course information from the calendar
 
 ### Things to consider when answering questions
 - Sometimes a course is only offered at an affiliate college, so you need to check the course catalog of the affiliate college to see if the course is offered.
 - When recommending courses, consider the student's program, year, and completed courses from their profile.
 - Always check prerequisites before recommending a course.
+
+### Breadth (Graduation) Requirements
+To graduate, students must complete breadth courses spanning subject-area categories at Western: Category A (Social Sciences), Category B (Arts & Humanities), and Category C (Sciences).
+- Use `get_breadth_requirements()` to look up which category a subject falls under.
+- When recommending courses or planning a schedule, check whether the student still needs to satisfy a breadth category and suggest courses that fill the gap.
+- For the exact number of breadth courses required, fetch the breadth policy page with `fetch_url`: https://www.westerncalendar.uwo.ca/PolicyPages.cfm?Command=showCategory&PolicyCategoryID=4&SelectedCalendar=Live&ArchiveID=#SubHeading_7
 
 ### Student Profile
 The following is the student's profile. Use it to personalize your answers:
@@ -215,6 +243,7 @@ agent = Agent(
         check_prerequisites,
         search_courses,
         get_completed_courses,
+        get_breadth_requirements,
     ],
 )
 

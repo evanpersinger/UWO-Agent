@@ -1,0 +1,161 @@
+# Western University Breadth Requirements
+
+Subjects are grouped into three breadth categories. A course counts toward the category of its subject area.
+
+## Category A — Social Sciences
+
+- American Studies
+- Analytics and Decision Sciences
+- Animal Ethics and Sustainability Leadership
+- Anthropology
+- Black Studies
+- Business Administration
+- Canadian Studies
+- Childhood and Youth Studies
+- Creative Arts
+- Dance
+- Digital Communication
+- Disability Studies
+- Economics
+- Education
+- Family Studies and Human Development
+- Foods and Nutrition
+- Gender, Sexuality, and Women’s Studies
+- Geography and Environment
+- Global Social Innovation
+- Governance, Leadership, and Ethics
+- Health Sciences
+- History
+- Human Ecology
+- Human Rights Studies
+- Indigenous Studies
+- Information and Media Studies
+- Interdisciplinary Studies
+- International Relations
+- Jewish Studies
+- Kinesiology
+- Law
+- Leadership Studies
+- Linguistics
+- Management and Organizational Studies
+- Media and Communication Studies
+- Media and the Public Interest
+- Music
+- Nursing
+- Political Science
+- Politics, Philosophy and Economics
+- Psychology
+- Rehabilitation Sciences
+- Social Justice and Peace Studies
+- Social Science
+- Social Work
+- Sociology
+- Thanatology
+- Transitional Justice
+
+## Category B — Arts & Humanities
+
+- American Sign Language
+- Arabic
+- Art History
+- Arts and Humanities
+- Black Studies
+- Chinese
+- Classical Studies
+- Comparative Literature and Culture
+- Creative Arts
+- Digital Humanities
+- East Asia Studies
+- English
+- Film Studies
+- French
+- French Studies
+- Gender, Sexuality, and Women’s Studies
+- German
+- Global Great Books
+- Greek
+- Hebrew
+- Hindi
+- Intercultural Communications
+- Islamic Studies
+- Italian
+- Italian Studies
+- Japanese
+- Korean
+- Latin
+- Linguistics
+- Medieval Studies
+- Museum and Curatorial Studies
+- Persian
+- Philosophy
+- Polish
+- Portuguese
+- Religious Studies
+- Russian
+- School for Advanced Studies in Arts and Humanities
+- Spanish
+- Speech
+- Studio Art
+- The New Liberal Arts
+- Theatre Studies
+- Theological Studies
+- Visual Arts History
+- Visual Arts Studio
+- World Literatures and Cultures
+- Writing
+
+## Category C — Sciences
+
+- Actuarial Science
+- Anatomy and Cell Biology
+- Applied Mathematics
+- Artificial Intelligence Systems Engineering
+- Astronomy
+- Biochemistry
+- Biology
+- Biomedical Engineering
+- Biostatistics
+- Calculus
+- Chemical and Biochemical Engineering
+- Chemical Biology
+- Chemistry
+- Civil and Environmental Engineering
+- Communication Sciences and Disorders
+- Computer Science
+- Data Science
+- Differential Equations
+- Earth Sciences
+- Electrical and Computer Engineering
+- Engineering Leadership and Innovation
+- Engineering Science
+- Environmental Science
+- Epidemiology
+- Epidemiology and Biostatistics
+- Financial Modelling
+- Green Process Engineering
+- History of Science
+- Integrated Engineering
+- Integrated Science
+- Linear Algebra
+- Materials Science
+- Mathematics
+- Mechanical and Materials Engineering
+- Mechatronic Systems Engineering
+- Medical Bioinformatics
+- Medical Biophysics
+- Medical Health Informatics
+- Medical Sciences
+- Microbiology and Immunology
+- Neuroscience
+- Numerical and Mathematical Methods
+- One Health
+- Pathology
+- Pharmacology
+- Physics
+- Physiology
+- Physiology and Pharmacology
+- Planetary Science
+- Public Health
+- Science
+- Software Engineering
+- Statistical Sciences
