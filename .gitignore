@@ -3,3 +3,6 @@
 .env
 .vscode/
 __pycache__/
+
+# Your personal profile (copy user_profile_example.md to this and fill it in)
+user_profile.md

@@ -52,7 +52,13 @@ This creates a virtual environment in `.venv` and installs everything pinned in 
 OPENAI_API_KEY=your_api_key_here
 ```
 
-3. Fill in your student profile in `user_profile.md` with your information (e.g., your program, year, courses you've taken, etc.) so the agent can provide personalized advice.
+3. Copy the profile template, then fill it in with your information (e.g., your program, year, courses you've taken, etc.) so the agent can provide personalized advice:
+
+```bash
+cp user_profile_example.md user_profile.md
+```
+
+Your `user_profile.md` is gitignored, so your personal info stays local and is never committed. Edit `user_profile.md` (not the example) with your details.
 
 ## Usage
 
@@ -82,7 +88,8 @@ To exit the agent, type `exit` or press `Ctrl+C`.
 - `pyproject.toml` - Project metadata and dependencies
 - `uv.lock` - Pinned, fully-resolved dependency versions (managed by uv)
 - `.env` - Environment variables (create this file with your API key)
-- `user_profile.md` - Student profile information (fill this in during setup)
+- `user_profile_example.md` - Template for your student profile (tracked in git)
+- `user_profile.md` - Your personal profile; copy it from the example and fill it in (gitignored, never committed)
 
 ## Tools
 
