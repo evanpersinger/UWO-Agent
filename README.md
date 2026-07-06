@@ -18,8 +18,7 @@ An AI agent that helps students research and plan courses at Western University.
 
 Before installing, make sure you have the following:
 
-- **Python 3.x** - Check with: `python --version` or `python3 --version`
-- **pip** - Python package manager (usually comes with Python). Check with: `pip --version` or `pip3 --version`
+- **uv** - Python package & project manager. Install from [https://docs.astral.sh/uv/](https://docs.astral.sh/uv/) or with `curl -LsSf https://astral.sh/uv/install.sh | sh`. Check with: `uv --version`. uv will automatically install a compatible Python (3.11+) for you.
 - **Git** - For cloning the repository. Check with: `git --version`
 - **OpenAI API Key** - Required for the agent to function. Get one at [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
 
@@ -34,21 +33,13 @@ git clone <repository-url>
 cd uwo_course_repo
 ```
 
-2. (Optional but recommended) Create and activate a virtual environment:
+2. Install dependencies:
 
 ```bash
-python -m venv venv
+uv sync
 ```
 
-Then activate it:
-- On macOS/Linux: `source venv/bin/activate`
-- On Windows: `venv\Scripts\activate`
-
-3. Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
+This creates a virtual environment in `.venv` and installs everything pinned in `uv.lock`.
 
 ## Setup
 
@@ -67,14 +58,10 @@ OPENAI_API_KEY=your_api_key_here
 
 1. Make sure you've completed the Setup steps above (created `.env` file and filled in `user_profile.md`)
 
-2. If you're using a virtual environment, activate it:
-   - On macOS/Linux: `source venv/bin/activate`
-   - On Windows: `venv\Scripts\activate`
-
-3. Run the agent:
+2. Run the agent:
 
 ```bash
-python agent.py
+uv run python agent.py
 ```
 
 The agent will start a REPL loop where you can ask questions about Western University courses. Type your questions and the agent will help you find the information you need.
@@ -92,7 +79,8 @@ To exit the agent, type `exit` or press `Ctrl+C`.
 ## Project Structure
 
 - `agent.py` - Main agent implementation
-- `requirements.txt` - Python dependencies
+- `pyproject.toml` - Project metadata and dependencies
+- `uv.lock` - Pinned, fully-resolved dependency versions (managed by uv)
 - `.env` - Environment variables (create this file with your API key)
 - `user_profile.md` - Student profile information (fill this in during setup)
 
@@ -100,7 +88,7 @@ To exit the agent, type `exit` or press `Ctrl+C`.
 
 The agent has access to:
 - `fetch_url` - Fetches content from Western University course calendar URLs (with caching for faster responses)
-- `OpenAIWebSearchTool` - Web search capabilities for additional information
+- `WebSearchTool` - Web search capabilities for additional information
 - `check_prerequisites` - Checks if you've completed prerequisites for a course
 - `search_courses` - Searches for courses by name or code
 - `get_completed_courses` - Retrieves your completed courses from your profile
