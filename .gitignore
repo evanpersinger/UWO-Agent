@@ -4,5 +4,6 @@
 .vscode/
 __pycache__/
 
-# Your personal profile (copy user_profile_example.md to this and fill it in)
+# Your personal profile 
 user_profile.md
+ds_requirements.md
